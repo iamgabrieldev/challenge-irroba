@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  homeMatches     TournamentMatch[] @relation("HomeTeam")
+  awayMatches     TournamentMatch[] @relation("AwayTeam")
+  wonMatches      TournamentMatch[] @relation("Winner")
+  tournamentTeams TournamentTeam[]
+}
+
+model Tournament {
+  id        String   @id @default(uuid())
+  name      String?
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+
+  matches TournamentMatch[]
+  teams   TournamentTeam[]
+}
+
+model TournamentTeam {
+  tournamentId     String
+  teamId           String
+  inscriptionOrder Int
+
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  team       Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@id([tournamentId, teamId])
+}
+
+model TournamentMatch {
+  id           String   @id @default(uuid())
+  tournamentId String
+  homeTeamId   String
+  awayTeamId   String
+  homeScore    Int?
+  awayScore    Int?
+  winnerId     String?
+  phase        String
+  matchOrder   Int
+  createdAt    DateTime @default(now())
+
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  homeTeam   Team       @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam   Team       @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  winner     Team?      @relation("Winner", fields: [winnerId], references: [id])
+}
