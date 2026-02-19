@@ -1,10 +1,19 @@
+import path from 'node:path';
 import { defineConfig } from 'vitest/config';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
+  plugins: [tsconfigPaths()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   test: {
     globals: true,
     environment: 'node',
     include: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
+    exclude: ['**/*.e2e.spec.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
@@ -12,7 +21,7 @@ export default defineConfig({
       exclude: [
         'src/**/*.test.ts',
         'src/**/*.spec.ts',
-        'src/main.ts',
+        'src/server.ts',
         '**/node_modules/**',
         '**/dist/**',
         '**/*.config.*',

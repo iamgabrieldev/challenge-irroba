@@ -68,8 +68,16 @@ O arquivo **`teste.py`** fica na **raiz do projeto**. Ele é usado pelo backend 
 
 ## Testes
 
+**Unitários** (sem banco):
+
 ```bash
 npm test
+```
+
+**E2E** (requer PostgreSQL rodando; ex.: `docker-compose up -d postgres`):
+
+```bash
+npm run test:e2e
 ```
 
 Com cobertura (meta 90%):
@@ -77,6 +85,14 @@ Com cobertura (meta 90%):
 ```bash
 npm run test:coverage
 ```
+
+## CI/CD
+
+O projeto possui workflow GitHub Actions (`.github/workflows/ci.yml`) que executa em todo push/PR para as branches `main` e `master`:
+
+- **lint**: ESLint
+- **test**: testes unitários
+- **test-e2e**: testes E2E com PostgreSQL em serviço
 
 ## Documentação do projeto
 
@@ -87,4 +103,6 @@ npm run test:coverage
 - **Diagramas UML:** [docs/diagrams.md](docs/diagrams.md)
 - **System design:** [docs/system-design.md](docs/system-design.md)
 
-Documentação da API (Swagger/Postman) será disponibilizada conforme implementação dos endpoints.
+- **API REST**: http://localhost:3000
+- **Swagger/OpenAPI**: http://localhost:3000/docs
+- **Collection Postman/Insomnia**: [docs/meu-campeonato-postman.json](docs/meu-campeonato-postman.json)

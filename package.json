@@ -2,17 +2,19 @@
   "name": "meu-campeonato",
   "version": "0.1.0",
   "description": "API Meu Campeonato - simulação de campeonato eliminatório (mata-mata)",
-  "main": "dist/main.js",
+  "main": "dist/server.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/main.js",
-    "dev": "tsx watch src/main.ts",
+    "build": "prisma generate && tsup src/server.ts --format cjs --out-dir dist --clean",
+    "start": "node dist/server.js",
+    "dev": "tsx watch -r tsconfig-paths/register src/server.ts",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:e2e": "prisma migrate deploy && vitest run --config vitest.e2e.config.ts",
+    "test:e2e:watch": "vitest --config vitest.e2e.config.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio"
@@ -25,6 +27,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.11.0",
+    "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "@vitest/coverage-v8": "^2.1.9",
@@ -32,12 +35,21 @@
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.2.0",
     "prisma": "^5.9.0",
+    "tsconfig-paths": "^4.2.0",
+    "tsup": "^8.0.0",
     "tsx": "^4.7.0",
     "typescript": "^5.3.0",
+    "vite-tsconfig-paths": "^4.3.0",
     "vitest": "^2.1.9"
   },
   "dependencies": {
+    "@fastify/cors": "^11.2.0",
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^5.2.5",
     "@prisma/client": "^5.9.0",
-    "fastify": "^4.26.0"
+    "dotenv": "^16.4.0",
+    "fastify": "^4.26.0",
+    "supertest": "^7.2.2",
+    "zod": "^3.22.0"
   }
 }
