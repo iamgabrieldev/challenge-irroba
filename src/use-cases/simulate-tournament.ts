@@ -1,4 +1,3 @@
-import { Team } from '@prisma/client';
 import { ScoreGenerator } from '@/lib/python-score-generator';
 import { TournamentsRepository } from '@/repositories/tournaments-repository';
 import { TournamentTeamsRepository } from '@/repositories/tournament-teams-repository';

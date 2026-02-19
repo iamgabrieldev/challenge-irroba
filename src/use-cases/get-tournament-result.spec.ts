@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { InMemoryTeamsRepository } from '@/repositories/in-memory/in-memory-teams-repository';
 import { InMemoryTournamentsRepository } from '@/repositories/in-memory/in-memory-tournaments-repository';
 import { InMemoryTournamentTeamsRepository } from '@/repositories/in-memory/in-memory-tournament-teams-repository';
@@ -21,8 +21,9 @@ function createMockScoreGenerator(
 
 describe('GetTournamentResult Use Case', () => {
   it('should throw TournamentNotFoundError when tournament does not exist', async () => {
+    const teamsRepo = new InMemoryTeamsRepository();
     const tournamentsRepo = new InMemoryTournamentsRepository();
-    const matchesRepo = new InMemoryTournamentMatchesRepository();
+    const matchesRepo = new InMemoryTournamentMatchesRepository(teamsRepo);
 
     const sut = new GetTournamentResultUseCase(
       tournamentsRepo,
