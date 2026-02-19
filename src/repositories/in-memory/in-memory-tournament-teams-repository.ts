@@ -1,4 +1,4 @@
-import { Team, TournamentTeam } from '@prisma/client';
+import { TournamentTeam } from '@prisma/client';
 import { TeamsRepository } from '@/repositories/teams-repository';
 import { TournamentTeamsRepository } from '@/repositories/tournament-teams-repository';
 

@@ -99,7 +99,7 @@ export async function tournamentsRoutes(app: FastifyInstance) {
     const { tournament } = await createTournamentWithTeamsUseCase.execute({
       teamIds,
     });
-    const result = await simulateTournamentUseCase.execute({
+    await simulateTournamentUseCase.execute({
       tournamentId: tournament.id,
     });
     const fullResult = await getTournamentResultUseCase.execute({

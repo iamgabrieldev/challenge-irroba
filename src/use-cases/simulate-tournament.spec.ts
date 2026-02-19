@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { InMemoryTeamsRepository } from '@/repositories/in-memory/in-memory-teams-repository';
 import { InMemoryTournamentsRepository } from '@/repositories/in-memory/in-memory-tournaments-repository';
 import { InMemoryTournamentTeamsRepository } from '@/repositories/in-memory/in-memory-tournament-teams-repository';
@@ -24,7 +24,7 @@ describe('SimulateTournament Use Case', () => {
     const teamsRepo = new InMemoryTeamsRepository();
     const tournamentsRepo = new InMemoryTournamentsRepository();
     const ttRepo = new InMemoryTournamentTeamsRepository(teamsRepo);
-    const matchesRepo = new InMemoryTournamentMatchesRepository();
+    const matchesRepo = new InMemoryTournamentMatchesRepository(teamsRepo);
     const scoreGen = createMockScoreGenerator([[1, 0]]);
 
     const sut = new SimulateTournamentUseCase(
@@ -43,7 +43,7 @@ describe('SimulateTournament Use Case', () => {
     const teamsRepo = new InMemoryTeamsRepository();
     const tournamentsRepo = new InMemoryTournamentsRepository();
     const ttRepo = new InMemoryTournamentTeamsRepository(teamsRepo);
-    const matchesRepo = new InMemoryTournamentMatchesRepository();
+    const matchesRepo = new InMemoryTournamentMatchesRepository(teamsRepo);
     const scoreGen = createMockScoreGenerator([[1, 0]]);
 
     const tournament = await tournamentsRepo.create({});
@@ -72,7 +72,7 @@ describe('SimulateTournament Use Case', () => {
     const teamsRepo = new InMemoryTeamsRepository();
     const tournamentsRepo = new InMemoryTournamentsRepository();
     const ttRepo = new InMemoryTournamentTeamsRepository(teamsRepo);
-    const matchesRepo = new InMemoryTournamentMatchesRepository();
+    const matchesRepo = new InMemoryTournamentMatchesRepository(teamsRepo);
     const scoreGen = createMockScoreGenerator([
       [2, 1],
       [1, 0],
@@ -119,7 +119,7 @@ describe('SimulateTournament Use Case', () => {
     const teamsRepo = new InMemoryTeamsRepository();
     const tournamentsRepo = new InMemoryTournamentsRepository();
     const ttRepo = new InMemoryTournamentTeamsRepository(teamsRepo);
-    const matchesRepo = new InMemoryTournamentMatchesRepository();
+    const matchesRepo = new InMemoryTournamentMatchesRepository(teamsRepo);
     // Empate 0-0 na primeira partida, pênaltis decidem (2 chamadas)
     const scoreGen = createMockScoreGenerator([
       [0, 0],

@@ -1,7 +1,10 @@
 import { randomUUID } from 'node:crypto';
-import { Team, TournamentMatch } from '@prisma/client';
+import { TournamentMatch } from '@prisma/client';
 import { TeamsRepository } from '@/repositories/teams-repository';
-import { TournamentMatchesRepository } from '@/repositories/tournament-matches-repository';
+import {
+  TournamentMatchesRepository,
+  TournamentMatchWithRelations,
+} from '@/repositories/tournament-matches-repository';
 
 export class InMemoryTournamentMatchesRepository
   implements TournamentMatchesRepository
@@ -36,11 +39,17 @@ export class InMemoryTournamentMatchesRepository
     return match;
   }
 
-  async findManyByTournamentId(tournamentId: string) {
+  async findManyByTournamentId(
+    tournamentId: string
+  ): Promise<TournamentMatchWithRelations[]> {
     const items = this.items.filter(
       (item) => item.tournamentId === tournamentId
     );
-    if (!this.teamsRepository) return items;
+    if (!this.teamsRepository) {
+      throw new Error(
+        'teamsRepository is required for findManyByTournamentId'
+      );
+    }
     return Promise.all(
       items.map(async (m) => {
         const homeTeam = await this.teamsRepository!.findById(m.homeTeamId);
@@ -48,10 +57,13 @@ export class InMemoryTournamentMatchesRepository
         const winner = m.winnerId
           ? await this.teamsRepository!.findById(m.winnerId)
           : null;
+        if (!homeTeam || !awayTeam) {
+          throw new Error(`Team not found for match ${m.id}`);
+        }
         return {
           ...m,
-          homeTeam: homeTeam!,
-          awayTeam: awayTeam!,
+          homeTeam,
+          awayTeam,
           winner,
         };
       })
