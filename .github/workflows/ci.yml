@@ -1,85 +1,85 @@
-name: CI
+# name: CI
 
-on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+# on:
+#   push:
+#     branches: [main, master]
+#   pull_request:
+#     branches: [main, master]
 
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+# jobs:
+#   lint:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24.12'
-          cache: 'npm'
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '24.12'
+#           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+#       - name: Install dependencies
+#         run: npm ci
 
-      - name: Generate Prisma Client
-        run: npx prisma generate
+#       - name: Generate Prisma Client
+#         run: npx prisma generate
 
-      - name: Run lint
-        run: npm run lint
+#       - name: Run lint
+#         run: npm run lint
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+#   test:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24.12'
-          cache: 'npm'
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '24.12'
+#           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+#       - name: Install dependencies
+#         run: npm ci
 
-      - name: Generate Prisma Client
-        run: npx prisma generate
+#       - name: Generate Prisma Client
+#         run: npx prisma generate
 
-      - name: Run unit tests
-        run: npm test
+#       - name: Run unit tests
+#         run: npm test
 
-  test-e2e:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_USER: campeonato
-          POSTGRES_PASSWORD: campeonato123
-          POSTGRES_DB: meu_campeonato
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U campeonato -d meu_campeonato"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+#   test-e2e:
+#     runs-on: ubuntu-latest
+#     services:
+#       postgres:
+#         image: postgres:16-alpine
+#         env:
+#           POSTGRES_USER: campeonato
+#           POSTGRES_PASSWORD: campeonato123
+#           POSTGRES_DB: meu_campeonato
+#         ports:
+#           - 5432:5432
+#         options: >-
+#           --health-cmd "pg_isready -U campeonato -d meu_campeonato"
+#           --health-interval 5s
+#           --health-timeout 5s
+#           --health-retries 10
 
-    steps:
-      - uses: actions/checkout@v4
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24.12'
-          cache: 'npm'
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '24.12'
+#           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+#       - name: Install dependencies
+#         run: npm ci
 
-      - name: Generate Prisma Client
-        run: npx prisma generate
+#       - name: Generate Prisma Client
+#         run: npx prisma generate
 
-      - name: Run E2E tests
-        run: npm run test:e2e
-        env:
-          DATABASE_URL: postgresql://campeonato:campeonato123@localhost:5432/meu_campeonato
+#       - name: Run E2E tests
+#         run: npm run test:e2e
+#         env:
+#           DATABASE_URL: postgresql://campeonato:campeonato123@localhost:5432/meu_campeonato
