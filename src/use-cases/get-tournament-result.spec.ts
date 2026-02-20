@@ -19,8 +19,8 @@ function createMockScoreGenerator(
   };
 }
 
-describe('GetTournamentResult Use Case', () => {
-  it('should throw TournamentNotFoundError when tournament does not exist', async () => {
+describe('GetTournamentResult Caso de Uso', () => {
+  it('deve lançar TournamentNotFoundError quando o torneio não existir', async () => {
     const teamsRepo = new InMemoryTeamsRepository();
     const tournamentsRepo = new InMemoryTournamentsRepository();
     const matchesRepo = new InMemoryTournamentMatchesRepository(teamsRepo);
@@ -35,7 +35,7 @@ describe('GetTournamentResult Use Case', () => {
     ).rejects.toBeInstanceOf(TournamentNotFoundError);
   });
 
-  it('should return tournament result with matches and podium', async () => {
+  it('deve retornar o resultado do torneio com partidas e colocação', async () => {
     const teamsRepo = new InMemoryTeamsRepository();
     const tournamentsRepo = new InMemoryTournamentsRepository();
     const ttRepo = new InMemoryTournamentTeamsRepository(teamsRepo);

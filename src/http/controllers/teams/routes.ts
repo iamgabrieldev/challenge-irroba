@@ -9,7 +9,7 @@ export async function teamsRoutes(app: FastifyInstance) {
   const createTeamUseCase = new CreateTeamUseCase(teamsRepository);
   const listTeamsUseCase = new ListTeamsUseCase(teamsRepository);
 
-  app.post('/', {
+  app.post('', {
     schema: {
       tags: ['Teams'],
       summary: 'Criar time',
@@ -38,7 +38,7 @@ export async function teamsRoutes(app: FastifyInstance) {
     return reply.status(201).send(team);
   });
 
-  app.get('/', {
+  app.get('', {
     schema: {
       tags: ['Teams'],
       summary: 'Listar times',

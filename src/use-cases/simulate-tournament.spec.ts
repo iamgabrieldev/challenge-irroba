@@ -19,8 +19,8 @@ function createMockScoreGenerator(
   };
 }
 
-describe('SimulateTournament Use Case', () => {
-  it('should throw TournamentNotFoundError when tournament does not exist', async () => {
+describe('SimulateTournament Caso de Uso', () => {
+  it('deve lançar TournamentNotFoundError quando o torneio não existir', async () => {
     const teamsRepo = new InMemoryTeamsRepository();
     const tournamentsRepo = new InMemoryTournamentsRepository();
     const ttRepo = new InMemoryTournamentTeamsRepository(teamsRepo);
@@ -39,7 +39,7 @@ describe('SimulateTournament Use Case', () => {
     ).rejects.toBeInstanceOf(TournamentNotFoundError);
   });
 
-  it('should throw InvalidTeamsCountError when not 8 teams', async () => {
+  it('deve lançar InvalidTeamsCountError quando não houver 8 times', async () => {
     const teamsRepo = new InMemoryTeamsRepository();
     const tournamentsRepo = new InMemoryTournamentsRepository();
     const ttRepo = new InMemoryTournamentTeamsRepository(teamsRepo);
@@ -68,7 +68,7 @@ describe('SimulateTournament Use Case', () => {
     ).rejects.toBeInstanceOf(InvalidTeamsCountError);
   });
 
-  it('should simulate full tournament and return champion', async () => {
+  it('deve simular todo o torneio e retornar o campeão', async () => {
     const teamsRepo = new InMemoryTeamsRepository();
     const tournamentsRepo = new InMemoryTournamentsRepository();
     const ttRepo = new InMemoryTournamentTeamsRepository(teamsRepo);

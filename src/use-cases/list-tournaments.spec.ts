@@ -5,18 +5,18 @@ import { ListTournamentsUseCase } from './list-tournaments';
 let tournamentsRepository: InMemoryTournamentsRepository;
 let sut: ListTournamentsUseCase;
 
-describe('ListTournaments Use Case', () => {
+describe('ListTournaments Caso de Uso', () => {
   beforeEach(() => {
     tournamentsRepository = new InMemoryTournamentsRepository();
     sut = new ListTournamentsUseCase(tournamentsRepository);
   });
 
-  it('should return empty array when no tournaments', async () => {
+  it('deve retornar array vazio quando não houver torneios', async () => {
     const { tournaments } = await sut.execute();
     expect(tournaments).toEqual([]);
   });
 
-  it('should return all tournaments', async () => {
+  it('deve retornar todos os torneios', async () => {
     await tournamentsRepository.create({ name: 'Campeonato 1' });
     await tournamentsRepository.create({ name: 'Campeonato 2' });
 

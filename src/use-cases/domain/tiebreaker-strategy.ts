@@ -1,8 +1,3 @@
-/**
- * Estratégias de desempate para partidas (Strategy Pattern).
- * Ordem de aplicação: pontuação acumulada -> pênaltis -> ordem de inscrição.
- */
-
 export interface TiebreakerContext {
   scores: Map<string, number>;
   teams: { id: string; inscriptionOrder: number }[];

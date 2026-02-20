@@ -108,7 +108,7 @@ export async function tournamentsRoutes(app: FastifyInstance) {
     return reply.status(201).send(fullResult);
   });
 
-  app.post('/', {
+  app.post('', {
     schema: {
       tags: ['Tournaments'],
       summary: 'Criar torneio',
@@ -175,7 +175,7 @@ export async function tournamentsRoutes(app: FastifyInstance) {
     }
   });
 
-  app.get('/', {
+  app.get('', {
     schema: {
       tags: ['Tournaments'],
       summary: 'Listar torneios',

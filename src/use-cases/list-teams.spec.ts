@@ -5,18 +5,18 @@ import { ListTeamsUseCase } from './list-teams';
 let teamsRepository: InMemoryTeamsRepository;
 let sut: ListTeamsUseCase;
 
-describe('ListTeams Use Case', () => {
+describe('ListTeams Caso de Uso', () => {
   beforeEach(() => {
     teamsRepository = new InMemoryTeamsRepository();
     sut = new ListTeamsUseCase(teamsRepository);
   });
 
-  it('should return empty array when no teams', async () => {
+  it('deve retornar array vazio quando não houver times', async () => {
     const { teams } = await sut.execute();
     expect(teams).toEqual([]);
   });
 
-  it('should return all teams', async () => {
+  it('deve retornar todos os times', async () => {
     await teamsRepository.create({ name: 'Time A' });
     await teamsRepository.create({ name: 'Time B' });
 

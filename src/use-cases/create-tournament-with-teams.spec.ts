@@ -5,7 +5,7 @@ import { InMemoryTournamentTeamsRepository } from '@/repositories/in-memory/in-m
 import { CreateTournamentWithTeamsUseCase } from './create-tournament-with-teams';
 import { InvalidTeamsCountError } from './errors/invalid-teams-count-error';
 
-describe('CreateTournamentWithTeams Use Case', () => {
+describe('CreateTournamentWithTeams Caso de Uso', () => {
   let teamsRepository: InMemoryTeamsRepository;
   let tournamentsRepository: InMemoryTournamentsRepository;
   let tournamentTeamsRepository: InMemoryTournamentTeamsRepository;
@@ -24,7 +24,7 @@ describe('CreateTournamentWithTeams Use Case', () => {
     );
   });
 
-  it('should throw InvalidTeamsCountError when less than 8 teams', async () => {
+  it('deve lançar InvalidTeamsCountError quando ter menos de 8 times no chaveamento', async () => {
     const teamIds = Array.from({ length: 4 }, () => 'uuid');
     for (let i = 0; i < 4; i++) {
       const team = await teamsRepository.create({ name: `Team ${i}` });
@@ -36,7 +36,7 @@ describe('CreateTournamentWithTeams Use Case', () => {
     ).rejects.toBeInstanceOf(InvalidTeamsCountError);
   });
 
-  it('should throw InvalidTeamsCountError when more than 8 teams', async () => {
+  it('deve lançar InvalidTeamsCountError quando houver mais de 8 times no chaveamento', async () => {
     const teamIds: string[] = [];
     for (let i = 0; i < 10; i++) {
       const team = await teamsRepository.create({ name: `Team ${i}` });
@@ -48,7 +48,7 @@ describe('CreateTournamentWithTeams Use Case', () => {
     );
   });
 
-  it('should throw Error when a team does not exist', async () => {
+  it('deve lançar Error quando um time não existir', async () => {
     const teamIds: string[] = [];
     for (let i = 0; i < 7; i++) {
       const team = await teamsRepository.create({ name: `Team ${i}` });
@@ -61,7 +61,7 @@ describe('CreateTournamentWithTeams Use Case', () => {
     );
   });
 
-  it('should create tournament with 8 teams successfully', async () => {
+  it('deve criar um torneio com 8 times com sucesso', async () => {
     const teamIds: string[] = [];
     for (let i = 0; i < 8; i++) {
       const team = await teamsRepository.create({ name: `Team ${i}` });
@@ -74,7 +74,7 @@ describe('CreateTournamentWithTeams Use Case', () => {
     expect(tournament.status).toBe('PENDING');
   });
 
-  it('should persist tournament teams with correct inscription order', async () => {
+  it('deve persistir os times do torneio com ordem de inscrição correta', async () => {
     const teamIds: string[] = [];
     for (let i = 0; i < 8; i++) {
       const team = await teamsRepository.create({ name: `Team ${i}` });
