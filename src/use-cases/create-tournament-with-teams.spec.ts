@@ -3,6 +3,7 @@ import { InMemoryTeamsRepository } from '@/repositories/in-memory/in-memory-team
 import { InMemoryTournamentsRepository } from '@/repositories/in-memory/in-memory-tournaments-repository';
 import { InMemoryTournamentTeamsRepository } from '@/repositories/in-memory/in-memory-tournament-teams-repository';
 import { CreateTournamentWithTeamsUseCase } from './create-tournament-with-teams';
+import { DuplicateTeamIdsError } from './errors/duplicate-team-ids-error';
 import { InvalidTeamsCountError } from './errors/invalid-teams-count-error';
 
 describe('CreateTournamentWithTeams Caso de Uso', () => {
@@ -45,6 +46,15 @@ describe('CreateTournamentWithTeams Caso de Uso', () => {
 
     await expect(sut.execute({ teamIds })).rejects.toBeInstanceOf(
       InvalidTeamsCountError
+    );
+  });
+
+  it('deve lançar DuplicateTeamIdsError quando teamIds contiver duplicatas', async () => {
+    const team = await teamsRepository.create({ name: 'Team A' });
+    const teamIds = Array(8).fill(team.id);
+
+    await expect(sut.execute({ teamIds })).rejects.toBeInstanceOf(
+      DuplicateTeamIdsError
     );
   });
 

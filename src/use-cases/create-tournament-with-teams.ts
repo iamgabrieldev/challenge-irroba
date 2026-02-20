@@ -2,6 +2,7 @@ import { Tournament } from '@prisma/client';
 import { TournamentsRepository } from '@/repositories/tournaments-repository';
 import { TournamentTeamsRepository } from '@/repositories/tournament-teams-repository';
 import { TeamsRepository } from '@/repositories/teams-repository';
+import { DuplicateTeamIdsError } from './errors/duplicate-team-ids-error';
 import { InvalidTeamsCountError } from './errors/invalid-teams-count-error';
 
 const REQUIRED_TEAMS = 8;
@@ -26,6 +27,11 @@ export class CreateTournamentWithTeamsUseCase {
   }: CreateTournamentWithTeamsUseCaseRequest): Promise<CreateTournamentWithTeamsUseCaseResponse> {
     if (teamIds.length !== REQUIRED_TEAMS) {
       throw new InvalidTeamsCountError();
+    }
+
+    const uniqueIds = new Set(teamIds);
+    if (uniqueIds.size !== REQUIRED_TEAMS) {
+      throw new DuplicateTeamIdsError();
     }
 
     for (const teamId of teamIds) {

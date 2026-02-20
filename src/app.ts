@@ -4,6 +4,7 @@ import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { ZodError } from 'zod';
 import { env } from '@/env';
+import { DuplicateTeamIdsError } from '@/use-cases/errors/duplicate-team-ids-error';
 import { teamsRoutes } from '@/http/controllers/teams/routes';
 import { tournamentsRoutes } from '@/http/controllers/tournaments/routes';
 
@@ -32,6 +33,10 @@ app.setErrorHandler((error, _, reply) => {
       message: 'Validation error.',
       issues: error.format(),
     });
+  }
+
+  if (error instanceof DuplicateTeamIdsError) {
+    return reply.status(400).send({ message: error.message });
   }
 
   if (env.NODE_ENV !== 'production') {
