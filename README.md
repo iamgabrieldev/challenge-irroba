@@ -1,108 +1,137 @@
-# Meu Campeonato
+<div align="center">
+  <img src="./assets/logo-irroba.png" alt="irroba Logo" width="400"/>
+</div>
 
-API backend para simulação de campeonato eliminatório (mata-mata) de futebol. Desafio técnico com Node.js, TypeScript, Fastify, Prisma e PostgreSQL.
+# API Meu Campeonato
 
-## Pré-requisitos
+API de simulação de campeonato eliminatório (mata-mata) desenvolvida em Node.js com TypeScript, Fastify e Prisma, seguindo os princípios SOLID e Clean Architecture para garantir um código limpo, testável, escalável e de fácil manutenção.
 
-- **Node.js** 20+ (LTS)
-- **Docker** e **Docker Compose** (para rodar Postgres e Redis)
-- **Python 3** (para o script `teste.py`, usado na geração de placar)
+## ⚽ Principais Funcionalidades da Aplicação
 
-## Execução com Docker Compose
+- **Times (Teams):** Cadastro, listagem e gerenciamento de equipes participantes.
+- **Torneios (Tournaments):** Criação de campeonatos no formato mata-mata, definindo chaveamentos.
+- **Partidas e Simulação:** Geração automatizada dos resultados das partidas (utilizando um script Python integrado) e avanços de chave até a determinação do campeão.
 
-Suba todos os serviços (app, PostgreSQL, Redis):
+## 🛠️ Tecnologias Utilizadas
 
+Esta arquitetura foi desenhada buscando alta performance e facilidade de integração contínua (CI/CD).
+
+- **Node.js (>= 20):** Ambiente de execução de alta performance.
+- **TypeScript:** Tipagem estática para maior segurança em tempo de desenvolvimento.
+- **Fastify:** Framework web focado em extrema performance e baixo overhead de recursos.
+- **Prisma ORM:** Abstração de banco de dados robusta e type-safe.
+- **PostgreSQL:** Banco de dados relacional (via Docker).
+- **Zod:** Validação de schemas e dados de entrada (Data Transfer Objects).
+- **Vitest:** Framework de testes rápido, com suporte nativo a ESM e TypeScript.
+- **Python:** Script auxiliar para processamento algorítmico da geração de scores.
+- **Swagger / OpenAPI v3:** Documentação viva e interativa da API.
+
+## 🚀 Como executar o projeto localmente
+
+Siga o passo a passo abaixo para rodar o ambiente de desenvolvimento.
+
+### 📋 1. Pré-requisitos
+Certifique-se de ter instalado em sua máquina:
+- Node.js (versão 20 ou superior)
+- Docker e Docker Compose
+- Python 3 (para a geração de placares)
+
+### 📦 2. Clonar e instalar dependências
 ```bash
-docker-compose up --build
+# Clone o repositório
+$ git clone https://github.com/iamgabrieldev/challenge-irroba.git $ cd challenge-irroba
+
+# Instale as dependências
+$ npm install
+```
+### ▶️ 3. Rodar o projeto localmente
+```bash 
+# Roda api e banco de dados localmente
+$ docker-compose up -d 
+
+# Passo a Passo caso queira rodar de forma manual
+$ npm run dev
+
+# Roda as migrations no banco de dados
+$ npm run prisma:migrate
+
+# Gera o Prisma Client com as tipagens
+$ npm run prisma:generate
+
+# Executar a instancia do banco de dados
+$ docker compose up postgres -d
 ```
 
-- API: http://localhost:3000
-- Health: http://localhost:3000/health
-- Postgres: localhost:5432 (usuário `campeonato`, senha `campeonato123`, DB `meu_campeonato`)
-- Redis: localhost:6379
-
-## Execução local (sem Docker da API)
-
-1. Instale as dependências:
-
+### 🧪 4. Executar os testes automatizados
 ```bash
-npm install
+# Executa a verificação de linter
+$ npm run lint
+
+# Executa os testes unitários
+$ npm run test
+
+# Executa os testes unitários gerando o relatório de cobertura de código (Coverage)
+$ npm run test:coverage
+
+# Obs: O banco de dados (Docker) deve estar rodando, pois este comando 
+$ npm run test:e2e
 ```
 
-2. Configure o banco. Crie um arquivo `.env` na raiz com:
+## 📚 Documentação da API
 
-```
-DATABASE_URL="postgresql://campeonato:campeonato123@localhost:5432/meu_campeonato"
-REDIS_URL="redis://localhost:6379"
-```
+### 📖 Swagger / OpenAPI
 
-3. Suba apenas Postgres e Redis (se quiser) com Docker:
+A API possui documentação interativa via Swagger UI, disponível em:
 
-```bash
-docker-compose up -d postgres redis
-```
+**URL:** http://localhost:3000/docs
 
-4. Gere o Prisma Client e rode as migrations:
+<div align="center">
+  <img src="./assets/swagger-irroba.png" alt="Swagger UI" width="800"/>
+</div>
 
-```bash
-npx prisma generate
-npx prisma migrate dev
-```
+### 📮 Collection Postman/Insomnia
 
-5. Inicie a API em modo desenvolvimento:
+Para facilitar os testes da API, disponibilizamos uma collection completa com todos os endpoints:
 
-```bash
-npm run dev
-```
+**📥 Download:** [assets/collections-irroba.json](./assets/collections-irroba.json)
 
-Ou em produção (build + start):
+**Como usar:**
+1. Importe o arquivo `collections-irroba.json` no Postman ou Insomnia
+2. Configure a variável `baseUrl` para `http://localhost:3000`
+3. Crie 8 times via `POST /teams` e salve os IDs nas variáveis `teamId1` a `teamId8`
+4. Use `POST /tournaments/simulate` para criar e simular um campeonato completo
 
-```bash
-npm run build
-npm start
-```
+---
 
-## Script Python (teste.py)
+## 🔌 Endpoints Disponíveis
 
-O arquivo **`teste.py`** fica na **raiz do projeto**. Ele é usado pelo backend para gerar o placar de cada partida (duas linhas com valores de 0 a 7). O enunciado exige que o arquivo se chame `teste.py`.
+### ✅ Health Check
+- **GET** `/health` - Verifica o status da API
 
-## Testes
+### 👥 Times (Teams)
+- **POST** `/teams` - Criar um novo time
+  - Body: `{ "name": "Nome do Time" }`
+  - Response: `201` com dados do time criado
+  
+- **GET** `/teams` - Listar todos os times
+  - Response: `200` com array de times
 
-**Unitários** (sem banco):
+### 🏆 Torneios (Tournaments)
+- **POST** `/tournaments` - Criar torneio com 8 times
+  - Body: `{ "teamIds": ["uuid1", "uuid2", ..., "uuid8"] }`
+  - Response: `201` com dados do torneio criado
+  
+- **POST** `/tournaments/simulate` - Criar e simular torneio completo
+  - Body: `{ "teamIds": ["uuid1", "uuid2", ..., "uuid8"] }`
+  - Response: `201` com resultado completo (partidas + pódio)
+  
+- **POST** `/tournaments/:tournamentId/simulate` - Simular torneio existente
+  - Response: `200` com resultado da simulação
+  
+- **GET** `/tournaments` - Listar todos os torneios
+  - Response: `200` com array de torneios
+  
+- **GET** `/tournaments/:tournamentId` - Obter resultado de um torneio
+  - Response: `200` com partidas e pódio (1º, 2º, 3º lugares)
 
-```bash
-npm test
-```
-
-**E2E** (requer PostgreSQL rodando; ex.: `docker-compose up -d postgres`):
-
-```bash
-npm run test:e2e
-```
-
-Com cobertura (meta 90%):
-
-```bash
-npm run test:coverage
-```
-
-## CI/CD
-
-O projeto possui workflow GitHub Actions (`.github/workflows/ci.yml`) que executa em todo push/PR para as branches `main` e `master`:
-
-- **lint**: ESLint
-- **test**: testes unitários
-- **test-e2e**: testes E2E com PostgreSQL em serviço
-
-## Documentação do projeto
-
-- **Requisitos e cronograma:** [plan.md](plan.md)
-- **Tarefas por fase:** [tasks.md](tasks.md)
-- **Checklist de requisitos:** [TODO.md](TODO.md)
-- **Modelo de dados:** [docs/database.md](docs/database.md)
-- **Diagramas UML:** [docs/diagrams.md](docs/diagrams.md)
-- **System design:** [docs/system-design.md](docs/system-design.md)
-
-- **API REST**: http://localhost:3000
-- **Swagger/OpenAPI**: http://localhost:3000/docs
-- **Collection Postman/Insomnia**: [docs/meu-campeonato-postman.json](docs/meu-campeonato-postman.json)
+---

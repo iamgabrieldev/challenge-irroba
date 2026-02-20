@@ -15,10 +15,7 @@ services:
       timeout: 5s
       retries: 5
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
+
 
   app:
     build: .
@@ -27,12 +24,9 @@ services:
     environment:
       PORT: 3000
       DATABASE_URL: postgresql://campeonato:campeonato123@postgres:5432/meu_campeonato
-      REDIS_URL: redis://redis:6379
     depends_on:
       postgres:
         condition: service_healthy
-      redis:
-        condition: service_started
 
 volumes:
   pgdata:

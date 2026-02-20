@@ -1,0 +1,107 @@
+{
+  "info": {
+    "name": "Meu Campeonato API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "API para simulação de campeonato eliminatório"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "tournamentId", "value": "" },
+    { "key": "teamId1", "value": "" },
+    { "key": "teamId2", "value": "" },
+    { "key": "teamId3", "value": "" },
+    { "key": "teamId4", "value": "" },
+    { "key": "teamId5", "value": "" },
+    { "key": "teamId6", "value": "" },
+    { "key": "teamId7", "value": "" },
+    { "key": "teamId8", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET Health",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Teams",
+      "item": [
+        {
+          "name": "POST Create Team",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Time Alpha\"\n}"
+            },
+            "url": "{{baseUrl}}/teams"
+          }
+        },
+        {
+          "name": "GET List Teams",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/teams"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tournaments",
+      "item": [
+        {
+          "name": "POST Create Tournament",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamIds\": [\n    \"{{teamId1}}\",\n    \"{{teamId2}}\",\n    \"uuid3\",\n    \"uuid4\",\n    \"uuid5\",\n    \"uuid6\",\n    \"uuid7\",\n    \"uuid8\"\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/tournaments"
+          }
+        },
+        {
+          "name": "POST Create and Simulate Tournament",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teamIds\": [\n    \"{{teamId1}}\",\n    \"{{teamId2}}\",\n    \"{{teamId3}}\",\n    \"{{teamId4}}\",\n    \"{{teamId5}}\",\n    \"{{teamId6}}\",\n    \"{{teamId7}}\",\n    \"{{teamId8}}\"\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/tournaments/simulate"
+          }
+        },
+        {
+          "name": "POST Simulate Existing Tournament",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/tournaments/{{tournamentId}}/simulate"
+          }
+        },
+        {
+          "name": "GET List Tournaments",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/tournaments"
+          }
+        },
+        {
+          "name": "GET Tournament Result",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/tournaments/{{tournamentId}}"
+          }
+        }
+      ]
+    }
+  ]
+}
